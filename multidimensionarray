@@ -1,0 +1,37 @@
+use std::cmp::{max, min};
+
+fn overlapping_meetings(meetings_a: Vec<Vec<i32>>, meetings_b: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+    let mut intersection = Vec::new();
+
+    for i in 0..meetings_a.len() {
+        for j in 0..meetings_b.len() {
+            let (st_a, st_b) = (meetings_a[i][0], meetings_b[j][0]);
+            let (ed_a, ed_b) = (meetings_a[i][1], meetings_b[j][1]);
+
+            if let Some(overlap_time) = overlap(st_a, st_b, ed_a, ed_b) {
+                intersection.push(overlap_time);
+            }
+        }
+    }
+
+    intersection
+}
+
+fn overlap(start_a: i32, start_b: i32, end_a: i32, end_b: i32) -> Option<Vec<i32>> {
+    let start_overlap = max(start_a, start_b);
+    let end_overlap = min(end_a, end_b);
+
+    if start_overlap < end_overlap {
+        Some(vec![start_overlap, end_overlap])
+    } else {
+        None
+    }
+}
+
+fn main() {
+    let person1 = vec![vec![13, 15], vec![15, 16], vec![7, 9]];
+    let person2 = vec![vec![14, 15], vec![5, 10]];
+
+    let intersection = overlapping_meetings(person1, person2);
+    println!("The overlapping timings are {:?}", intersection);
+}
